@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "media-monitoring"
+version = "0.1.0"
+description = ""
+authors = ["Fasih Hussain <fasihhussain00@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.6"
+motor = "^3.6.1"
+python-dateutil = "^2.9.0.post0"
+uvicorn = "^0.34.0"
+python-dotenv = "^1.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
