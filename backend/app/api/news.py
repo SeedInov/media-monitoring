@@ -4,7 +4,7 @@ from app.repo.news import NewsRepo
 
 news_router = APIRouter(prefix="/news", tags=["news"])
 
-@news_router.get("/")
+@news_router.get("")
 async def get(
     news_repo: NewsRepo = Depends(NewsRepo),
     search: str = "",
