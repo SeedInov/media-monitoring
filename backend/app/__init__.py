@@ -13,13 +13,16 @@ def init_routers(app_: FastAPI) -> None:
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    while True:
+    retry = 5
+    while retry > 0:
         try:
             await Database().client["admin"].command("ping")
             logger.info("Db Connection is successful")
+            await Database().initialize_indices()
             break
         except Exception as e:
             logger.error(f"Db Connection failed: {e}")
+            retry -= 1
     yield
 
 
