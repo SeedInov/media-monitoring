@@ -8,4 +8,6 @@ db = client[config.db_name]
 
 class Database:
     def __init__(self):
+        self.client = client
+        self.db = db
         self.news = db["news"]
