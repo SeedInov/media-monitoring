@@ -5,24 +5,12 @@ from fastapi import FastAPI
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.news import news_router
-from app.repo import Database
-from app.logger import logger
 
 def init_routers(app_: FastAPI) -> None:
     app_.include_router(news_router)
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    retry = 5
-    while retry > 0:
-        try:
-            await Database().client["admin"].command("ping")
-            logger.info("Db Connection is successful")
-            await Database().initialize_indices()
-            break
-        except Exception as e:
-            logger.error(f"Db Connection failed: {e}")
-            retry -= 1
     yield
 
 

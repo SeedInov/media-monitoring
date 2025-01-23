@@ -1,33 +1,18 @@
-from app.repo import Database
+from fastapi import Depends
+from app.repo import get_clickhouse_client
+from clickhouse_connect.driver import AsyncClient
+
 
 class NewsRepo:
-    def __init__(self):
-        self.news = Database().news
+    def __init__(self, client: AsyncClient = Depends(get_clickhouse_client)):
+        self.client = client
 
-    async def fetch(self, limit, offset, match={}) -> list:
-        news = list(
-            await self.news.aggregate(
-                [
-                    {"$match": match},
-                    {
-                        "$addFields": {
-                            "id": {"$toString": "$_id"},
-                        }
-                    },
-                    {"$project": {"_id": 0}},
-                    {"$skip": offset},
-                    {"$limit": limit},
-                ]
-            ).to_list(None)
+    async def fetch(self, limit, offset, where: str = "") -> list:
+        news = await self.client.query(
+            f"Select * from news {where} limit {limit} offset {offset};"
         )
-        return news
+        return list(news.named_results())
 
-    async def fetch_count(self, match={}) -> int:
-        count = list(
-            await self.news.aggregate([{"$match": match}, {"$count": "count"}]).to_list(
-                None
-            )
-        )
-        if count:
-            return count[0]["count"]
-        return 0
+    async def fetch_count(self, where: str = "") -> int:
+        news = await self.client.query(f"Select count(id) as count from news {where};")
+        return list(news.named_results())[0]
