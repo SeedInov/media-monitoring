@@ -7,6 +7,10 @@ readme = "README.md"
 package-mode = false
 
 [[tool.poetry.source]]
+name = "pypi"
+priority = "primary"
+
+[[tool.poetry.source]]
 name = "pytorch-src-cuda"
 url = "https://download.pytorch.org/whl/cu121"
 priority = "explicit"
@@ -25,8 +29,8 @@ transformers = "^4.47.1"
 
 
 [tool.poetry.group.torch.dependencies]
-torch = {version = "2.5.1+cu121", source = "pytorch-src-cuda"}
-# torch = {version = "^2.2.0+cpu", source = "pytorch-src-cpu"}
+# torch = {version = "2.5.1+cu121", source = "pytorch-src-cuda"}
+torch = {version = "2.5.1+cpu", source = "pytorch-src-cpu"}
 
 
 
