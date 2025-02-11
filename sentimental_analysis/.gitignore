@@ -1,0 +1,7 @@
+__pycache__
+
+# DATA
+data/
+
+# AI MODELS
+models/
