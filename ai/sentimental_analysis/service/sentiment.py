@@ -1,4 +1,5 @@
 import os
+from typing import Literal
 os.environ["HF_HOME"] = "models/huggingface"
 os.environ["HF_HUB_CACHE"] = "models/huggingface/hub"
 os.environ["HF_ASSETS_CACHE"] = "models/huggingface/assets"
@@ -17,12 +18,15 @@ MODEL_NAME = "tabularisai/multilingual-sentiment-analysis"
 
 TOKENIZER = AutoTokenizer.from_pretrained(MODEL_NAME)
 MODEL = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME).to(DEVICE)
-CLASSIFICATION_MAP = {
-    0: "Very Negative", 
-    1: "Negative", 
-    2: "Neutral", 
-    3: "Positive", 
-    4: "Very Positive"
+
+SentimentType = Literal["very negative", "negative", "neutral", "positive", "very positive"]
+
+CLASSIFICATION_MAP: dict[int, SentimentType] = {
+    0: "very negative", 
+    1: "negative", 
+    2: "neutral", 
+    3: "positive", 
+    4: "very positive"
 }
 
 def clear_vram():
