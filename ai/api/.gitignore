@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+
+# Poetry
+.venv
+
+# log files
+logs/*.log
+
+# Temporary files
+temp
+
+# Environment file
+.env
+
+# Model files
+*.pt
+models/**/*.xml
+models/**/*.bin
+models/**/*.yaml
+models/*.onnx
+
+# Visual Studio Code
+.vscode/
