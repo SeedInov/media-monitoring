@@ -1,18 +1,34 @@
+from typing import Any, Optional
 from fastapi import Depends
 from app.repo import get_clickhouse_client
 from clickhouse_connect.driver import AsyncClient
+
+from app.types.filters.news import NewsFilters
 
 
 class NewsRepo:
     def __init__(self, client: AsyncClient = Depends(get_clickhouse_client)):
         self.client = client
 
-    async def fetch(self, limit, offset, where: str = "") -> list:
-        news = await self.client.query(
-            f"Select * from news {where} limit {limit} offset {offset};"
-        )
+    async def fetch(self, limit, offset, filters: Optional[NewsFilters] = None) -> list:
+        base_query = "Select * from news"
+        if filters:
+            base_query = filters.apply_filters(base_query)
+        news = await self.client.query(f"{base_query} limit {limit} offset {offset};")
         return list(news.named_results())
 
-    async def fetch_count(self, where: str = "") -> int:
-        news = await self.client.query(f"Select count(id) as count from news {where};")
+    async def fetch_count(self, filters: Optional[NewsFilters] = None) -> int:
+        base_query = "Select count(id) as count from news"
+        if filters:
+            base_query = filters.apply_filters(base_query)
+        news = await self.client.query(f"{base_query};")
         return list(news.named_results())[0]
+
+    async def distinct(
+        self, field: str, filters: Optional[NewsFilters] = None
+    ) -> list[Any]:
+        base_query = f"Select distinct({field}) as {field} from news"
+        if filters:
+            base_query = filters.apply_filters(base_query)
+        news = await self.client.query(f"{base_query};")
+        return list(map(lambda x: x[field], news.named_results()))
