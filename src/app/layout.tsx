@@ -6,6 +6,7 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Lato } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
+import ReactQueryProvider from '@/providers/react-query-provider';
 
 export const metadata: Metadata = {
   title: 'Next Shadcn',
@@ -28,12 +29,14 @@ export default async function RootLayout({
     <html lang='en' className={`${lato.className}`} suppressHydrationWarning>
       <body className={'overflow-hidden'}>
         <NextTopLoader showSpinner={false} />
-        <NuqsAdapter>
-          <Providers session={session}>
-            <Toaster />
-            {children}
-          </Providers>
-        </NuqsAdapter>
+        <ReactQueryProvider>
+          <NuqsAdapter>
+            <Providers session={session}>
+              <Toaster />
+              {children}
+            </Providers>
+          </NuqsAdapter>
+        </ReactQueryProvider>
       </body>
     </html>
   );
