@@ -5,9 +5,11 @@ from fastapi import FastAPI
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.news import news_router
+from app.api.proxy import proxy_router
 
 def init_routers(app_: FastAPI) -> None:
     app_.include_router(news_router)
+    app_.include_router(proxy_router)
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):

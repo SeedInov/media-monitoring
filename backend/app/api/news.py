@@ -7,7 +7,7 @@ from app.types.filters.news import NewsFilters
 from app.dto import CountResponse
 from app.dto.news import DailyNewsSentiment, News, NewsSentimentByCountry, SentimentCount
 
-news_router = APIRouter(prefix="/news", tags=["news"])
+news_router = APIRouter(prefix="/news", tags=["News"])
 
 
 @news_router.get("")
