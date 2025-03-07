@@ -1,17 +1,24 @@
 from datetime import datetime
 from typing import Any, Optional
 from fastapi import Depends
-from app.repo import get_clickhouse_client
-from clickhouse_connect.driver import AsyncClient
-from app.types.filters.news import NewsFilters
-from app.dto.news import DailyNewsSentiment, News, NewsSentimentByCountry, SentimentCount
+from app.core.database import get_clickhouse_client, AsyncClient
+
+from app.core.schemas.filters.news import NewsFilters
+from app.core.models.news import News
+from app.core.schemas import CountResponse
+from app.core.schemas.news import (
+    SentimentByDay,
+    SentimentByCountry,
+    SentimentCount,
+)
 from pydantic import TypeAdapter
-from app.dto import CountResponse
+from app.core.logger import get_logger
 
 
-class NewsRepo:
+class NewsRepository:
     def __init__(self, client: AsyncClient = Depends(get_clickhouse_client)):
         self.client = client
+        self.logger = get_logger(self.__class__.__name__)
 
     async def fetch(
         self, limit, offset, filters: Optional[NewsFilters] = None
@@ -20,6 +27,7 @@ class NewsRepo:
         if filters:
             base_query = filters.apply_filters(base_query)
         news = await self.client.query(f"{base_query} limit {limit} offset {offset};")
+        self.logger.debug(f"Query: {base_query}")
         return TypeAdapter(list[News]).validate_python(list(news.named_results()))
 
     async def fetch_count(self, filters: Optional[NewsFilters] = None) -> CountResponse:
@@ -36,6 +44,7 @@ class NewsRepo:
         if filters:
             base_query = filters.apply_filters(base_query)
         news = await self.client.query(f"{base_query};")
+        self.logger.debug(f"Query: {base_query}")
         return list(map(lambda x: x[field], news.named_results()))
 
     async def sentiments_count(self) -> list[SentimentCount]:
@@ -49,13 +58,14 @@ class NewsRepo:
                 sentiment
         """
         news = await self.client.query(query)
+        self.logger.debug(f"Query: {query}")
         return TypeAdapter(list[SentimentCount]).validate_python(
             list(news.named_results())
         )
 
     async def sentiments_count_by_date(
         self, from_: datetime, to: datetime
-    ) -> list[DailyNewsSentiment]:
+    ) -> list[SentimentByDay]:
         query = f"""
             SELECT 
                 DATE(publish_date) AS date,
@@ -76,11 +86,12 @@ class NewsRepo:
                 date DESC
         """
         news = await self.client.query(query)
-        return TypeAdapter(list[DailyNewsSentiment]).validate_python(
+        self.logger.debug(f"Query: {query}")
+        return TypeAdapter(list[SentimentByDay]).validate_python(
             list(news.named_results())
         )
 
-    async def sentiments_count_by_country(self) -> list[NewsSentimentByCountry]:
+    async def sentiments_count_by_country(self) -> list[SentimentByCountry]:
         query = """
             SELECT 
                 country,
@@ -98,6 +109,7 @@ class NewsRepo:
                 country
         """
         news = await self.client.query(query)
-        return TypeAdapter(list[NewsSentimentByCountry]).validate_python(
+        self.logger.debug(f"Query: {query}")
+        return TypeAdapter(list[SentimentByCountry]).validate_python(
             list(news.named_results())
         )

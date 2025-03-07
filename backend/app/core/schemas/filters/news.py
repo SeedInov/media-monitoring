@@ -1,7 +1,7 @@
 from typing import List
 
 from fastapi import Query
-from app.types.filters import BaseFilters
+from app.core.schemas.filters import BaseFilters
 
 
 class NewsFilters(BaseFilters):
