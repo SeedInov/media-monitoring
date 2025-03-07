@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import List, Optional
 from pydantic import BaseModel
 
@@ -32,3 +32,26 @@ class News(BaseModel):
     sentiment: str
     sentiment_impactful_texts: List[str]
 
+
+class SentimentCount(BaseModel):
+    name: str
+    count: int
+
+
+class DailyNewsSentiment(BaseModel):
+    date: date
+    positive: int
+    negative: int
+    neutral: int
+    very_negative: int
+    very_positive: int
+    all: int
+
+class NewsSentimentByCountry(BaseModel):
+    country: str
+    positive: int
+    negative: int
+    neutral: int
+    very_negative: int
+    very_positive: int
+    all: int
