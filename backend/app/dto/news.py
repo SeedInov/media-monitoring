@@ -31,3 +31,4 @@ class News(BaseModel):
     extracted_keywords: List[str]
     sentiment: str
     sentiment_impactful_texts: List[str]
+
