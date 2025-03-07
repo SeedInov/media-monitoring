@@ -14,7 +14,7 @@ class Args(BaseModel):
 
 def main(args: Args):
     uvicorn.run(
-        app="app.main:app",
+        app="app:app",
         host="0.0.0.0",
         port=args.port,
         workers=args.workers,
