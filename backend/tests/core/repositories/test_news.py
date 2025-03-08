@@ -57,7 +57,7 @@ def news_repository(mock_client: AsyncMock) -> NewsRepository:
 
 @pytest.mark.asyncio
 class TestNewsRepository:
-    async def test_fetch(
+    async def should_fetch_news(
         self, news_repository: NewsRepository, mock_client: AsyncMock, fake_news: News
     ) -> None:
         mock_client.query.return_value.named_results = MagicMock()
@@ -67,7 +67,7 @@ class TestNewsRepository:
         assert isinstance(result[0], News)
         assert result[0].id == fake_news.id
 
-    async def test_fetch_count(
+    async def should_fetch_news_count(
         self, news_repository: NewsRepository, mock_client: AsyncMock
     ) -> None:
         mock_client.query.return_value.named_results = MagicMock()
@@ -76,7 +76,7 @@ class TestNewsRepository:
         assert isinstance(result, CountResponse)
         assert result.count == 10
 
-    async def test_distinct(
+    async def should_fetch_news_distinct_field_values(
         self, news_repository: NewsRepository, mock_client: AsyncMock
     ) -> None:
         mock_client.query.return_value.named_results = MagicMock()
@@ -87,7 +87,7 @@ class TestNewsRepository:
         result: list[str] = await news_repository.distinct("country")
         assert result == ["US", "UK"]
 
-    async def test_sentiments_count(
+    async def should_fetch_news_sentiments_count(
         self, news_repository: NewsRepository, mock_client: AsyncMock
     ) -> None:
         mock_client.query.return_value.named_results = MagicMock()
@@ -101,7 +101,7 @@ class TestNewsRepository:
         assert result[0].name == "positive"
         assert result[0].count == 5
 
-    async def test_sentiments_count_by_date(
+    async def should_fetch_sentiments_count_by_date(
         self, news_repository: NewsRepository, mock_client: AsyncMock
     ) -> None:
         from_date: datetime = datetime.now() - timedelta(days=10)
@@ -126,7 +126,7 @@ class TestNewsRepository:
         assert result[0].date == from_date.date()
         assert result[0].all == 12
 
-    async def test_sentiments_count_by_country(
+    async def should_fetch_sentiments_count_by_country(
         self, news_repository: NewsRepository, mock_client: AsyncMock
     ) -> None:
         mock_client.query.return_value.named_results = MagicMock()

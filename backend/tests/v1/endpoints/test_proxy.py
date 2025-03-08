@@ -15,7 +15,7 @@ async def client():
 
 
 @pytest.mark.asyncio
-async def test_proxy(client: AsyncClient):
+async def should_returns_proxy_content(client: AsyncClient):
     mock_client = AsyncMock(httpx.AsyncClient)
     mock_response = MagicMock()
     mock_response.status_code = 200

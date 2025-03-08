@@ -116,14 +116,14 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
 
 
 @pytest.mark.asyncio
-async def test_get_news(client: AsyncClient) -> None:
+async def should_get_news(client: AsyncClient) -> None:
     response = await client.get("/news?limit=5&offset=0")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 
 @pytest.mark.asyncio
-async def test_get_news_count(client: AsyncClient) -> None:
+async def should_get_news_count(client: AsyncClient) -> None:
     response = await client.get("/news/count")
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
@@ -131,21 +131,21 @@ async def test_get_news_count(client: AsyncClient) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_news_distinct(client: AsyncClient) -> None:
+async def should_get_news_distinct_field_values(client: AsyncClient) -> None:
     response = await client.get("/news/distinct?field=title")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 
 @pytest.mark.asyncio
-async def test_sentiment_count(client: AsyncClient) -> None:
+async def should_get_sentiment_count(client: AsyncClient) -> None:
     response = await client.get("/news/aggregate/sentiment")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 
 @pytest.mark.asyncio
-async def test_sentiment_count_by_date(client: AsyncClient) -> None:
+async def should_get_sentiment_count_by_date(client: AsyncClient) -> None:
     _from: str = (datetime.now(pytz.utc) - timedelta(days=30)).strftime("%Y-%m-%d")
     to: str = datetime.now(pytz.utc).strftime("%Y-%m-%d")
 
@@ -155,7 +155,7 @@ async def test_sentiment_count_by_date(client: AsyncClient) -> None:
 
 
 @pytest.mark.asyncio
-async def test_sentiment_count_by_country(client: AsyncClient) -> None:
+async def should_get_sentiment_count_by_country(client: AsyncClient) -> None:
     response = await client.get("/news/aggregate/sentiment/country")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
