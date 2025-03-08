@@ -29,7 +29,7 @@ if __name__ == "__main__":
     parser.add_argument("--keyfile", type=str, help="Path to SSL private key file")
     parser.add_argument("--certfile", type=str, help="Path to SSL certificate file")
     parser.add_argument(
-        "--debug", action="store_true", default=True, help="Enable debug mode"
+        "--debug", action="store_true", default=False, help="Enable debug mode"
     )
     parser.add_argument("--workers", type=int, default=1, help="Define Worker")
     parser.add_argument("--port", type=int, default=8000, help="Define Port")

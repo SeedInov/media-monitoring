@@ -1,14 +1,20 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import StreamingResponse
 import httpx
 
 from v1.dependencies import get_async_client
 
-proxy_router = APIRouter(prefix="/news", tags=["news"])
+proxy_router = APIRouter(prefix="/proxy", tags=["Proxy"])
 
 
-@proxy_router.get("/proxy")
-async def proxy(url: str, client: httpx.AsyncClient = Depends(get_async_client)):
+@proxy_router.get("")
+async def proxy(
+    url: str = Query(..., example="https://imageurl.com/image.png"),
+    client: httpx.AsyncClient = Depends(get_async_client),
+):
+    """
+    Proxy an image from a URL
+    """
     response = await client.get(
         url,
         headers={

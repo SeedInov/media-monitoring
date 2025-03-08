@@ -5,7 +5,14 @@ from v1.api import v1_api_router
 
 
 def get_application():
-    _app = FastAPI(title=settings.PROJECT_NAME, root_path="/api")
+    _app = FastAPI(
+        title=settings.PROJECT_NAME,
+        root_path="/api",
+        swagger_ui_parameters={
+            "syntaxHighlight": {"theme": "obsidian"},
+            "deepLinking": True,
+        },
+    )
 
     _app.include_router(v1_api_router)
 
