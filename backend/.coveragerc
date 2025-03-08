@@ -3,4 +3,4 @@ omit =
     app/core/config.py
     app/core/schemas/filters/__init__.py
     main.py
-    
+    v1/dependencies.py
