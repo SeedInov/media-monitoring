@@ -16,9 +16,9 @@ async def get(
     news_repo: NewsRepository = Depends(NewsRepository),
     query: NewsFilters = Depends(NewsFilters.parse),
     limit: int = Query(
-        10, ge=0, le=1000, description="Limit the number of results", example=10
+        10, ge=0, le=1000, description="Limit the number of results", examples=10
     ),
-    offset: int = Query(0, ge=0, description="Offset the results", example=0),
+    offset: int = Query(0, ge=0, description="Offset the results", examples=0),
 ) -> list[News]:
     """
     Get paginated list of news with advanced filtering options
@@ -42,7 +42,7 @@ async def count(
 @news_router.get("/distinct")
 async def distinct(
     field: str = Query(
-        ..., description="Field to get distinct values", example="country"
+        ..., description="Field to get distinct values", examples="country"
     ),
     news_repo: NewsRepository = Depends(NewsRepository),
     query: NewsFilters = Depends(NewsFilters.parse),
@@ -71,7 +71,7 @@ async def sentiment_count_by_date(
         ...,
         alias="from",
         description="Start range of news when published",
-        example="2025-01-01",
+        examples="2025-01-01",
     ),
     to: datetime = Query(
         default_factory=datetime.now, description="End range of news when published"

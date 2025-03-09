@@ -9,7 +9,7 @@ proxy_router = APIRouter(prefix="/proxy", tags=["Proxy"])
 
 @proxy_router.get("")
 async def proxy(
-    url: str = Query(..., example="https://imageurl.com/image.png"),
+    url: str = Query(..., examples="https://imageurl.com/image.png"),
     client: httpx.AsyncClient = Depends(get_async_client),
 ):
     """

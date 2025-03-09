@@ -27,7 +27,7 @@ async def should_returns_proxy_content(client: AsyncClient):
         return mock_client
 
     app.dependency_overrides[get_async_client] = get_mock_client
-    response = await client.get("/news/proxy?url=https://streaming-response.com")
+    response = await client.get("/proxy?url=https://streaming-response.com")
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "text/plain"
     assert response.content == b"Test content"
