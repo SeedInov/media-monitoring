@@ -1,5 +1,6 @@
 [run]
 omit =
     app/core/config.py
+    app/core/database/__init__.py
     main.py
     v1/dependencies.py
