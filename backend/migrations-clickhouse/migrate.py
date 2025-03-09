@@ -7,7 +7,7 @@ init(autoreset=True)
 
 dsn = urlparse(settings.CLICKHOUSE_DSN)
 db_name = dsn.path.lstrip("/")
-migrations_home = "app/core/database/migrations"
+migrations_home = "migrations-clickhouse"
 
 cluster = ClickhouseCluster(dsn.hostname, dsn.username, dsn.password)
 migrations = cluster.migrate(
@@ -18,9 +18,7 @@ migrations = cluster.migrate(
     multi_statement=True,
 )
 
-print(
-    f"{Fore.CYAN}{Style.BRIGHT}Running migrations for {db_name}{Style.RESET_ALL}"
-)
+print(f"{Fore.CYAN}{Style.BRIGHT}Running migrations for {db_name}{Style.RESET_ALL}")
 for migration in migrations:
     print(
         f"{Fore.GREEN}Migration {migration.version} with:{Style.RESET_ALL}\n{Fore.LIGHTBLACK_EX}{migration.script}{Style.RESET_ALL}"
