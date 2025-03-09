@@ -7,6 +7,7 @@ from app.core.database.repositories.news import NewsRepository
 from app.core.schemas.news import SentimentByDay, SentimentByCountry, SentimentCount
 from app.core.schemas import CountResponse
 from app.core.models.news import News
+from app.core.schemas.filters.news import NewsFilters
 
 fake = Faker()
 
@@ -55,36 +56,66 @@ def news_repository(mock_client: AsyncMock) -> NewsRepository:
     return NewsRepository(client=mock_client)
 
 
+@pytest.fixture
+def news_filters():
+    news_filter = MagicMock(spec=NewsFilters)
+    return news_filter
+
+
 @pytest.mark.asyncio
 class TestNewsRepository:
     async def should_fetch_news(
-        self, news_repository: NewsRepository, mock_client: AsyncMock, fake_news: News
+        self,
+        news_repository: NewsRepository,
+        mock_client: AsyncMock,
+        fake_news: News,
+        news_filters: MagicMock,
     ) -> None:
         mock_client.query.return_value.named_results = MagicMock()
-        mock_client.query.return_value.named_results.return_value = [fake_news.model_dump()]
-        result: list[News] = await news_repository.fetch(limit=1, offset=0)
+        mock_client.query.return_value.named_results.return_value = [
+            fake_news.model_dump()
+        ]
+        news_filters.apply_filters.return_value = "fake query"
+        result: list[News] = await news_repository.fetch(
+            limit=1, offset=0, filters=news_filters
+        )
+
+        news_filters.apply_filters.assert_called_once()
         assert isinstance(result, list)
         assert isinstance(result[0], News)
         assert result[0].id == fake_news.id
 
     async def should_fetch_news_count(
-        self, news_repository: NewsRepository, mock_client: AsyncMock
+        self,
+        news_repository: NewsRepository,
+        mock_client: AsyncMock,
+        news_filters: MagicMock,
     ) -> None:
         mock_client.query.return_value.named_results = MagicMock()
         mock_client.query.return_value.named_results.return_value = [{"count": 10}]
-        result: CountResponse = await news_repository.fetch_count()
+        news_filters.apply_filters.return_value = "fake query"
+        result: CountResponse = await news_repository.fetch_count(filters=news_filters)
+
+        news_filters.apply_filters.assert_called_once()
         assert isinstance(result, CountResponse)
         assert result.count == 10
 
     async def should_fetch_news_distinct_field_values(
-        self, news_repository: NewsRepository, mock_client: AsyncMock
+        self,
+        news_repository: NewsRepository,
+        mock_client: AsyncMock,
+        news_filters: MagicMock,
     ) -> None:
         mock_client.query.return_value.named_results = MagicMock()
         mock_client.query.return_value.named_results.return_value = [
             {"country": "US"},
             {"country": "UK"},
         ]
-        result: list[str] = await news_repository.distinct("country")
+        news_filters.apply_filters.return_value = "fake query"
+        result: list[str] = await news_repository.distinct(
+            "country", filters=news_filters
+        )
+        news_filters.apply_filters.assert_called_once()
         assert result == ["US", "UK"]
 
     async def should_fetch_news_sentiments_count(
