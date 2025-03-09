@@ -1,0 +1,31 @@
+CREATE TABLE IF NOT EXISTS news (
+    id String,
+    url String,
+    read_more_link String NULL,
+    language String,
+    title String,
+    top_image String NULL,
+    meta_img String NULL,
+    images Array(String),
+    movies Array(String),
+    keywords Array(String),
+    meta_keywords Array(String),
+    tags Array(String),
+    authors Array(String),
+    publish_date DateTime NULL,
+    summary String,
+    meta_description String NULL,
+    meta_lang String NULL,
+    meta_favicon String NULL,
+    meta_site_name String NULL,
+    canonical_link String NULL,
+    text String,
+    country String,
+    decoded_url String,
+    google_uri String,
+    extracted_keywords Array(String),
+    sentiment String,
+    sentiment_impactful_texts Array(String)
+) ENGINE = MergeTree()
+ORDER BY
+    id;
