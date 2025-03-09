@@ -10,6 +10,7 @@ dependencies = [
     "colorama>=0.4.6",
     "fastapi>=0.115.11",
     "httpx>=0.28.1",
+    "piccolo[postgres]>=1.23.0",
     "pydantic-settings>=2.8.1",
     "python-dateutil>=2.9.0.post0",
     "uvicorn>=0.34.0",
@@ -29,3 +30,6 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope="function"
 filterwarnings = "ignore::DeprecationWarning:clickhouse_connect.*"
 python_functions = "should_*"
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]

@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
     CLICKHOUSE_DSN: str
+    POSTGRES_DSN: str
     DEBUG: bool
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
 

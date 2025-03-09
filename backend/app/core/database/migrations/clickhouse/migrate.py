@@ -7,7 +7,7 @@ init(autoreset=True)
 
 dsn = urlparse(settings.CLICKHOUSE_DSN)
 db_name = dsn.path.lstrip("/")
-migrations_home = "migrations-clickhouse"
+migrations_home = "app/core/database/migrations/clickhouse"
 
 cluster = ClickhouseCluster(dsn.hostname, dsn.username, dsn.password)
 migrations = cluster.migrate(
